@@ -4,8 +4,11 @@
 ![imagen](https://user-images.githubusercontent.com/62716464/221433353-f2b7a874-b642-4266-ad0e-bced8c43791e.png)
 
 
-download dependencies by using pipenv:
-First one, open the project directoy.
+### First one, open the project directoy, Create a .env file and type:
+
+- SECRET_KEY=your_own_secret_key. 
+
+### Download dependencies by using pipenv:
 
 ### Windows:
 - py -m pip install pipenv.
