@@ -1,7 +1,8 @@
 # WORKSHOP
-![imagen](https://user-images.githubusercontent.com/62716464/221433061-c46085ee-1d9c-4ffc-897a-e20ee42db04c.png)
-![imagen](https://user-images.githubusercontent.com/62716464/221433127-576f3231-9321-4bfa-880a-e684c366dede.png)
-![imagen](https://user-images.githubusercontent.com/62716464/221433146-300c85d6-7fe5-4f66-a1bb-98514a9208cf.png)
+![imagen](https://user-images.githubusercontent.com/62716464/221433311-4e00da3e-04cf-4f3f-836c-a99087611a49.png)
+![imagen](https://user-images.githubusercontent.com/62716464/221433323-1947adf9-973d-4385-8688-cf2bbd6f3160.png)
+![imagen](https://user-images.githubusercontent.com/62716464/221433353-f2b7a874-b642-4266-ad0e-bced8c43791e.png)
+
 
 download dependencies by using pipenv:
 First one, open the project directoy.
