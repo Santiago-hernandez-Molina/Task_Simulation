@@ -1,0 +1,13 @@
+{% extends 'master_template.html' %}
+{% load static %}
+{% block content %}
+<h2>Total time simulation <span id="total-time-simulation">{{clock}}</span> Secs</h2>
+<a href="{% url 'create' %}" class="title" >Create New Simulation</a>
+
+<div id="text">
+	<div class="text-item">
+		{{df|safe}}
+	</div>
+</div>
+<script src="{% static 'js/index.js' %}"></script>
+{% endblock %}

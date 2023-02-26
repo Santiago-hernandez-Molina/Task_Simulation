@@ -1,0 +1,23 @@
+{% extends 'master_template.html' %}
+{% load static %}
+{% block content %}
+<div id="works-form">
+	<div  class="text-item">
+		<label for="">Machines</label>
+		<input id="machines-n" type="number">
+	</div>
+	<div class="text-item">	
+		<label for="">Works</label>
+		<input id="works-n" type="number">
+	</div>
+
+	<div class="text-item">
+		<button  id="set-works">Enviar</button>
+	</div>
+</div>
+	<form action="{% url 'execute' %}" method="post" id="send-data">
+		{% csrf_token %}
+	</form>
+
+	<script src="{% static 'js/create_work.js' %}"></script>
+{% endblock %}
