@@ -7,22 +7,22 @@ download dependencies by using pipenv:
 First one, open the project directoy.
 
 ### Windows:
-py -m pip install pipenv.
-py -m pipenv shell.
-py -m pipenv install.
+- py -m pip install pipenv.
+- py -m pipenv shell.
+- py -m pipenv install.
 
 ### Linux Distros:
-pip install pipenv
-pipenv shell
-pipenv install
+- pip install pipenv
+- pipenv shell
+- pipenv install
 
 ## start the project with:
-cd machine_ws/
+- cd machine_ws/
 
 ### Windows
-py -m manage.py runserver
+- py -m manage.py runserver
 ### Linux distros
-python3 manage.py runserver
+- python3 manage.py runserver
 
-###you can see the simulation in localhost typing:
-127.0.0.1:8000/test
+### you can see the simulation in localhost typing:
+- 127.0.0.1:8000/test
