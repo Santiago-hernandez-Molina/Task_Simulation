@@ -20,7 +20,9 @@ def index(request):
 
 def simulation(works,machines):
     register = pd.DataFrame({
-        "machine":[],"current_work":[],"count_down":[],"Time (secs)":[],"status":[]})
+        "Machine":[],"Current_work":[],
+        "Count_down":[],"Time (secs)":[],
+        "Status":[]})
     clock = 0
     while True:
         works_init, machines_init = search_task(works, machines)
@@ -31,7 +33,9 @@ def simulation(works,machines):
                                "W"+str(machine._work_id),
                                str(machine._count_down)+' Secs',
                                str(clock),machine._status],
-                              index=['machine','current_work','count_down','Time (secs)','status']),ignore_index=True)
+                              index=['Machine','Current_work',
+                                     'Count_down','Time (secs)',
+                                     'Status']),ignore_index=True)
         if check_end(works_init):
             break
     return clock,register.to_html(index=False)
@@ -52,8 +56,8 @@ def instace_works_machines(works):
     return (works_init, machines_init)
 
 
-def verify_non_zero(work: Work, machines: list[Machine], machine_count: int):
-    for machine in machines:
+def verify_non_zero(work: Work,  machine_count: int):
+    for i in range(machine_count):
         if work._tasks[work._actual_machine]._count_down <= 0:
             if work._actual_machine < machine_count:
                 work._actual_machine += 1
@@ -64,12 +68,13 @@ def verify_non_zero(work: Work, machines: list[Machine], machine_count: int):
 
 def search_task(works: list[Work], machines: list[Machine]):
     for work in works:
-        work = verify_non_zero(work, machines, len(machines)-1)
-        if work._is_completed == False and work._status == False and machines[work._actual_machine]._status == False:
-            machines[work._actual_machine], work = set_work(
-                    machines[work._actual_machine], work)
+        work = verify_non_zero(work, len(machines)-1)
+        if all([work._is_completed == False,
+                work._status == False,
+                machines[work._actual_machine]._status == False]):
+            machines[work._actual_machine], work = set_work(machines[work._actual_machine], work)
     for work in works:
-        if work._status == True:
+        if work._status:
             execute_task(work, machines[work._actual_machine], len(machines)-1)
     return (works, machines)
 
@@ -100,5 +105,5 @@ def set_work(machine: Machine, work: Work):
 
 
 def check_end(works: list[Work]):
-    inactive_machines = list(filter(lambda x: x._is_completed == True, works))
+    inactive_machines = list(filter(lambda x: x._is_completed, works))
     return len(inactive_machines) == len(works)
