@@ -1,3 +1,4 @@
+from numpy import int64
 import pandas as pd
 from simulation.models import Work, Task, Machine
 
@@ -7,9 +8,9 @@ class Simulation:
         self._machines = []
         self._clock = 0
         self._register = pd.DataFrame({
-            "Machine":[],"Current_work":[],
-            "Count_down":[],"Time (secs)":[],
-            "Status":[],"Event":[]})
+            "Machine":pd.Series(dtype='str'),"Current_work":pd.Series(dtype='str'),
+            "Count_down":pd.Series(dtype='int'),"Time (secs)":pd.Series(dtype='int'),
+            "Status":pd.Series(dtype='bool'),"Event":[]})
 
     def run(self):
         while  not self.check_end():
@@ -22,15 +23,12 @@ class Simulation:
 
     def get_registers(self):
         for machine in self._machines:
-            self._register = self._register.append(
-                    pd.Series(["M"+str(machine._id),
-                               "W"+str(machine._work_id),
-                               str(machine._count_down)+' Secs',
-                               str(self._clock),machine._status,
-                               machine._current_event],
-                              index=['Machine','Current_work',
-                                     'Count_down','Time (secs)',
-                                     'Status','Event']),ignore_index=True)
+            self._register = pd.concat([
+                self._register,
+                pd.DataFrame({
+                    "Machine":["M"+str(machine._id)],"Current_work":["W"+str(machine._work_id)],
+                    "Count_down":[int64(machine._count_down)],"Time (secs)":[int64(self._clock)],
+                    "Status":[machine._status],"Event":[machine._current_event]})])
 
 
     def instace_works_machines(self,works):
@@ -38,7 +36,6 @@ class Simulation:
             self._machines.append(Machine(i))
         for i,work in enumerate(works):
             new_work = Work(i)
-            new_work._tasks = []
             for j,task in enumerate(work):
                 new_work._tasks.append(Task(j,int(task)))
             self._works.append(new_work)

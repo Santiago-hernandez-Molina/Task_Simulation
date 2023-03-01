@@ -26,7 +26,7 @@ class Work:
         return output
 
     def verify_non_zero(self):
-        for i in range(len(self._tasks)-1):
+        for i in range(len(self._tasks)):
             if self._tasks[self._actual_machine]._count_down <= 0:
                 if self._actual_machine < len(self._tasks)-1:
                     self._actual_machine += 1
@@ -46,4 +46,5 @@ class Machine:
 
     def __str__(self) -> str:
         return f"status {self._status}"
+
 
