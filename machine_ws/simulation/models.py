@@ -1,4 +1,4 @@
-from django.db import models
+from enum import Enum
 
 
 class Task:
@@ -17,7 +17,7 @@ class Work:
         self._id = id
         self._status = False
         self._is_completed = False
-        self._tasks = None
+        self._tasks = []
         self._actual_machine = 0
 
     def __str__(self) -> str:
@@ -25,13 +25,25 @@ class Work:
         output += f" current task {self._tasks[self._actual_machine]._count_down}"
         return output
 
+    def verify_non_zero(self):
+        for i in range(len(self._tasks)-1):
+            if self._tasks[self._actual_machine]._count_down <= 0:
+                if self._actual_machine < len(self._tasks)-1:
+                    self._actual_machine += 1
+                else:
+                    self._is_completed = True
+                    return
+
 
 class Machine:
     def __init__(self, id):
         self._id = id
         self._status = False
+        self._events = Enum('Event',['STARTED','INACTIVE','RUNNING','FINISHED'])
+        self._current_event = self._events.INACTIVE
         self._work_id = 0
         self._count_down = 0
 
     def __str__(self) -> str:
         return f"status {self._status}"
+
