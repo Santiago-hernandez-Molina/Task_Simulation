@@ -11,7 +11,10 @@ def index(request):
     clock,df = simulation.run()
     return render(request, 'index.html',{"clock": clock,"df":df})
 
+
 def get_task_from_post(post_task):
+    """This method receive a post request and gets from it every task,
+    later return a matrix with them"""
     tasks_id = list(filter(lambda x: x.startswith('task'),post_task))
     tasks = []
     for task in tasks_id:

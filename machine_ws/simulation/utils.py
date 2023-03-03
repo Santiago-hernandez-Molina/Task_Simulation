@@ -67,7 +67,6 @@ class Simulation:
             machine._status = False
             work._status = False
             machine._current_event = machine._events.FINISHED
-            work.verify_non_zero()
 
 
     def set_work(self,machine: Machine, work: Work):
@@ -83,5 +82,5 @@ class Simulation:
         inactive_machines = list(filter(lambda x: x._is_completed, self._works))
         end = len(inactive_machines) == len(self._works)
         if end:
-            self.get_registers()
+            self._clock -= 1 
         return end

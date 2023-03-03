@@ -2,6 +2,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300&family=Quicksand:wght@300&family=Rubik:wght@300;500&display=swap');
 
 body {
+	background-color: #03001C;
+	color: #B6EADA;
+}
+.content{
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -14,6 +18,7 @@ body {
 .title {
 	color: #5B8FB9;
 	font-family: 'Nunito Sans', sans-serif;
+	text-align:center;
 }
 
 
@@ -43,7 +48,7 @@ th{
 	padding: 20px;
 	display:flex;
 	flex-direction: column;
-	max-height: 500px;
+	max-height: 400px;
 	overflow-y:auto ;
 }
 
