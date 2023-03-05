@@ -3,7 +3,7 @@ import pandas as pd
 from simulation.models import Work, Task, Machine
 
 class Simulation:
-    def __init__(self) -> None:
+    def __init__(self):
         self._works = []
         self._machines = []
         self._clock = 0
@@ -22,6 +22,7 @@ class Simulation:
 
 
     def get_registers(self):
+        """ this method saves the information in a DataFrame """
         for machine in self._machines:
             self._register = pd.concat([
                 self._register,
@@ -32,6 +33,11 @@ class Simulation:
 
 
     def instace_works_machines(self,works):
+        """
+
+        Args:
+            works (): list[list[int]]
+        """
         for i in range(len(works[0])):
             self._machines.append(Machine(i))
         for i,work in enumerate(works):
@@ -42,6 +48,7 @@ class Simulation:
 
 
     def search_task(self):
+        """ Find avaliables works to be executed in a machine """
         for work in self._works:
             work.verify_non_zero()
             if all([work._is_completed == False,
@@ -52,6 +59,15 @@ class Simulation:
 
 
     def set_work_to_machine(self,machine: Machine, work: Work):
+        """
+
+        Args:
+            machine: Machine
+            work: Work
+
+        Returns: tuple(machine, work)
+            
+        """
         machine._work_id = work._id
         machine._current_event = machine._events.STARTED
         machine._status = True
@@ -61,14 +77,21 @@ class Simulation:
 
 
     def execute_machines(self):
-        for work in self._works:
-            if work._status:
-                machine = self._machines[work._actual_machine]
+        for machine in self._machines:
+            if machine._status:
+                work = self._works[machine._work_id]
                 machine.execute_task(work._tasks[work._actual_machine])
                 self.end_work(work, machine)
 
 
+
     def end_work(self,work: Work, machine: Machine):
+        """It checks if count_down is zero
+
+        Args:
+            work: Work
+            machine: Machine
+        """
         if machine._count_down < 1:
             machine._status = False
             work._status = False
@@ -76,6 +99,11 @@ class Simulation:
 
 
     def check_end(self):
+        """It checks is all works are completed
+
+        Returns: boolean
+            
+        """
         inactive_machines = list(filter(lambda x: x._is_completed, self._works))
         end = len(inactive_machines) == len(self._works)
         if end:
