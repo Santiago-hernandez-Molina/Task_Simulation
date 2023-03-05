@@ -1,5 +1,5 @@
 # WORKSHOP
-![imagen](https://user-images.githubusercontent.com/62716464/221433311-4e00da3e-04cf-4f3f-836c-a99087611a49.png)
+![imagen](https://user-images.githubusercontent.com/62716464/222977736-2c1d8293-8588-44d1-98d5-143878fe90ed.png)
 ![imagen](https://user-images.githubusercontent.com/62716464/221433323-1947adf9-973d-4385-8688-cf2bbd6f3160.png)
 ![imagen](https://user-images.githubusercontent.com/62716464/221433353-f2b7a874-b642-4266-ad0e-bced8c43791e.png)
 
