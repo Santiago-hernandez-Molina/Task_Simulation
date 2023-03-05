@@ -34,7 +34,6 @@ class Simulation:
 
     def instace_works_machines(self,works):
         """
-
         Args:
             works (): list[list[int]]
         """
@@ -60,7 +59,6 @@ class Simulation:
 
     def set_work_to_machine(self,machine: Machine, work: Work):
         """
-
         Args:
             machine: Machine
             work: Work
@@ -102,7 +100,6 @@ class Simulation:
         """It checks is all works are completed
 
         Returns: boolean
-            
         """
         inactive_machines = list(filter(lambda x: x._is_completed, self._works))
         end = len(inactive_machines) == len(self._works)
