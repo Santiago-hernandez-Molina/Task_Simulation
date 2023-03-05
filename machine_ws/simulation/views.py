@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from simulation.utils import Simulation
+from simulation.simulation_controller import Simulation
 
 
 def index(request):
@@ -24,6 +24,3 @@ def get_task_from_post(post_task):
         else:
             tasks.append(['0' for i in dict(post_task)[task]])
     return tasks
-
-
-

@@ -16,7 +16,7 @@ class Simulation:
         while  not self.check_end():
             self.search_task()
             self.get_registers()
-            self.execute_task()
+            self.execute_machines()
             self._clock += 1
         return self._clock,self._register.to_html(index=False)
 
@@ -47,18 +47,24 @@ class Simulation:
             if all([work._is_completed == False,
                     work._status == False,
                     self._machines[work._actual_machine]._status == False]):
-                self._machines[work._actual_machine], work = self.set_work(
+                self._machines[work._actual_machine], work = self.set_work_to_machine(
                         self._machines[work._actual_machine], work)
 
 
-    def execute_task(self):
+    def set_work_to_machine(self,machine: Machine, work: Work):
+        machine._work_id = work._id
+        machine._current_event = machine._events.STARTED
+        machine._status = True
+        machine._count_down = work._tasks[work._actual_machine]._task_time
+        work._status = True
+        return (machine, work)
+
+
+    def execute_machines(self):
         for work in self._works:
             if work._status:
                 machine = self._machines[work._actual_machine]
-                if machine._count_down > 0:
-                    machine._count_down -= 1
-                    machine._current_event = machine._events.RUNNING
-                    work._tasks[work._actual_machine]._count_down -= 1
+                machine.execute_task(work._tasks[work._actual_machine])
                 self.end_work(work, machine)
 
 
@@ -67,15 +73,6 @@ class Simulation:
             machine._status = False
             work._status = False
             machine._current_event = machine._events.FINISHED
-
-
-    def set_work(self,machine: Machine, work: Work):
-        machine._work_id = work._id
-        machine._current_event = machine._events.STARTED
-        machine._status = True
-        machine._count_down = work._tasks[work._actual_machine]._task_time
-        work._status = True
-        return (machine, work)
 
 
     def check_end(self):

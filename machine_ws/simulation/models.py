@@ -46,4 +46,8 @@ class Machine:
     def __str__(self) -> str:
         return f"status {self._status}"
 
-
+    def execute_task(self,task:Task):
+        if self._count_down > 0:
+            self._count_down -= 1
+            self._current_event = self._events.RUNNING
+            task._count_down -= 1
