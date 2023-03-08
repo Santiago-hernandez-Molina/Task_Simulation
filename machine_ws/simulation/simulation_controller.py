@@ -1,6 +1,8 @@
 from numpy import int64
 import pandas as pd
-from simulation.models import Work, Task, Machine
+from simulation.models.work import Work
+from simulation.models.task import Task
+from simulation.models.machine import Machine
 
 class Simulation:
     def __init__(self):
@@ -13,30 +15,24 @@ class Simulation:
             "Status":pd.Series(dtype='bool'),"Event":[]})
 
     def run(self):
-        while  not self.check_end():
+        while not self.check_end():
             self.search_task()
-            self.get_registers()
             self.execute_machines()
             self._clock += 1
         return self._clock,self._register.to_html(index=False)
 
 
-    def get_registers(self):
+    def get_registers(self,machine):
         """ this method saves the information in a DataFrame """
-        for machine in self._machines:
-            self._register = pd.concat([
-                self._register,
-                pd.DataFrame({
-                    "Machine":["M"+str(machine._id)],"Current_work":["W"+str(machine._work_id)],
-                    "Count_down":[int64(machine._count_down)],"Time (secs)":[int64(self._clock)],
-                    "Status":[machine._status],"Event":[machine._current_event]})])
+        self._register = pd.concat([
+            self._register,
+            pd.DataFrame({
+                "Machine":["M"+str(machine._id)],"Current_work":["W"+str(machine._work_id)],
+                "Count_down":[int64(machine._count_down)],"Time (secs)":[int64(self._clock)],
+                "Status":[machine._status],"Event":[machine._current_event]})])
 
 
     def instace_works_machines(self,works):
-        """
-        Args:
-            works (): list[list[int]]
-        """
         for i in range(len(works[0])):
             self._machines.append(Machine(i))
         for i,work in enumerate(works):
@@ -47,62 +43,39 @@ class Simulation:
 
 
     def search_task(self):
-        """ Find avaliables works to be executed in a machine """
         for work in self._works:
-            work.verify_non_zero()
-            if all([work._is_completed == False,
-                    work._status == False,
-                    self._machines[work._actual_machine]._status == False]):
-                self._machines[work._actual_machine], work = self.set_work_to_machine(
-                        self._machines[work._actual_machine], work)
+            task = work.get_avaliable_task()
+            if task is not None and self._machines[work._current_machine]._status ==False:
+                self.set_work_to_machine(self._machines[work._current_machine], task, work._id)
 
 
-    def set_work_to_machine(self,machine: Machine, work: Work):
+    def set_work_to_machine(self,machine: Machine, task: Task, work_id: int):
         """
         Args:
             machine: Machine
             work: Work
 
         Returns: tuple(machine, work)
-            
+
         """
-        machine._work_id = work._id
+        machine._task = task
         machine._current_event = machine._events.STARTED
         machine._status = True
-        machine._count_down = work._tasks[work._actual_machine]._task_time
-        work._status = True
-        return (machine, work)
+        machine._count_down = task._task_time
+        machine._work_id = work_id
+        task._status = True
 
 
     def execute_machines(self):
         for machine in self._machines:
+            self.get_registers(machine)
             if machine._status:
-                work = self._works[machine._work_id]
-                machine.execute_task(work._tasks[work._actual_machine])
-                self.end_work(work, machine)
-
-
-
-    def end_work(self,work: Work, machine: Machine):
-        """It checks if count_down is zero
-
-        Args:
-            work: Work
-            machine: Machine
-        """
-        if machine._count_down < 1:
-            machine._status = False
-            work._status = False
-            machine._current_event = machine._events.FINISHED
+                machine.execute_task()
 
 
     def check_end(self):
-        """It checks is all works are completed
-
-        Returns: boolean
-        """
         inactive_machines = list(filter(lambda x: x._is_completed, self._works))
         end = len(inactive_machines) == len(self._works)
         if end:
-            self._clock -= 1 
+            self._clock -= 1
         return end
